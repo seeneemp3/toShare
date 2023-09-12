@@ -3,9 +3,10 @@ package org.personal.Item;
 import java.util.List;
 
 public interface ItemService {
-    Item addNewItem(long userId, Item item);
-
     List<Item> getItems(long userId);
+    Item add(long userId, Item item);
 
-    void deleteItem(long userId, long itemId);
+    Item findById(long itemId);
+
+    void delete(long userId, long itemId);
 }

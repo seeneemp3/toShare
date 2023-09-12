@@ -14,8 +14,10 @@ public class UserServiceImpl implements UserService{
         return repository.getAll();
     }
 
-    public User save(User user) {
-        return repository.save(user);
+    public User add(User user) {
+        return repository.add(user);
     }
+    public User getById(Long userId){ return repository.getById(userId);}
+    public User delete(Long userId){ return repository.delete(userId);}
 
 }

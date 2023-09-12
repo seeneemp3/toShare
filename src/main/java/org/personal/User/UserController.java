@@ -1,10 +1,7 @@
 package org.personal.User;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,10 +15,18 @@ public class UserController {
     public List<User> getAll(){
         return userService.getAll();
     }
+    @GetMapping("/{userId}")
+    public User getById(@PathVariable Long userId){
+        return userService.getById(userId);
+    }
 
-    @GetMapping
-    public User save(@RequestBody User user){
-        return userService.save(user);
+    @PostMapping
+    public User add(@RequestBody User user){
+        return userService.add(user);
+    }
+    @DeleteMapping("/{userId}")
+    public User delete(@PathVariable Long userId){
+      return userService.delete(userId);
     }
 
 }

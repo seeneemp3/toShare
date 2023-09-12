@@ -9,9 +9,12 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService{
     private final ItemRepository repository;
     @Override
-    public Item addNewItem(long userId, Item item) {
+    public Item add(long userId, Item item) {
         item.setUserId(userId);
-        return repository.save(item);
+        return repository.add(item);
+    }
+    public Item findById(long itemId){
+        repository
     }
 
     @Override
@@ -20,7 +23,7 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public void deleteItem(long userId, long itemId) {
+    public void delete(long userId, long itemId) {
         repository.deleteByUserAndItemId(userId, itemId);
     }
 }

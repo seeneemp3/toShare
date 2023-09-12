@@ -4,5 +4,8 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getAll();
-    User save(User user);
+    User add(User user);
+    User getById(Long userId);
+    User delete(Long userId);
+
 }
