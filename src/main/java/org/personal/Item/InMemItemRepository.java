@@ -40,6 +40,19 @@ public class InMemItemRepository implements ItemRepository{
             list.removeIf(i -> i.getId().equals(itemId));
         }
     }
+    public List<Item> search(String query) {
+        var list = new ArrayList<Item>();
+        items.values().stream().flatMap(List::stream)
+                .forEach(item -> {
+                    if (item.getAvailable() &&
+                            item.getDescription().toLowerCase().contains(query.toLowerCase()) ||
+                            item.getName().toLowerCase().contains(query.toLowerCase())) {
+                        list.add(item);
+                    }
+                });
+        return list;
+    }
+
     private Long getId() {
         long lastId = items.values()
                 .stream()

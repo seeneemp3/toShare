@@ -12,4 +12,5 @@ public interface ItemRepository {
     Item update(Long userId, Item item, Long itemId);
 
     void delete(Long userId, Long itemId);
+    List<Item> search(String query);
 }

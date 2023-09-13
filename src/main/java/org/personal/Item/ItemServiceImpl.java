@@ -29,17 +29,17 @@ public class ItemServiceImpl implements ItemService{
         item.setUserId(userId);
         return itemMapper.itemToDto(itemRepository.add(item));
     }
-
-
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto){
         Item item = itemRepository.getById(itemId);
         Item newItem = validateBeforeUpdate(userId, item, itemDto);
         return itemMapper.itemToDto(itemRepository.update(userId, newItem,itemId));
     }
-
     @Override
     public void delete(Long userId, Long itemId) {
         itemRepository.delete(userId, itemId);
+    }
+    public List<ItemDto> search(String query){
+        return itemRepository.search(query).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 
     private Item validateBeforeUpdate(Long userId, Item item, ItemDto itemDto) {
