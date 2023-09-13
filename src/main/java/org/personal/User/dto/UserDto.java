@@ -1,8 +1,9 @@
-package org.personal.User;
+package org.personal.User.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.personal.User.UserState;
 
 @Data
 @AllArgsConstructor
@@ -10,8 +11,6 @@ import lombok.NoArgsConstructor;
 public class UserDto {
     private Long id;
     private String email;
-    private String firstName;
-    private String lastName;
-    private String registrationDate;
+    private String name;
     private UserState state;
 }

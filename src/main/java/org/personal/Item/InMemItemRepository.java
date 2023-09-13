@@ -9,10 +9,10 @@ import java.util.*;
 public class InMemItemRepository implements ItemRepository{
     private final Map<Long, List<Item>> items = new HashMap<>();
 
-    public List<Item> getAll(long userId) {
+    public List<Item> getAll(Long userId) {
         return items.getOrDefault(userId, Collections.emptyList());
     }
-    public Item getById(long itemId){
+    public Item getById(Long itemId){
         return items.values().stream()
                 .flatMap(List::stream)
                 .filter(id -> id.getId().equals(itemId))
@@ -30,13 +30,17 @@ public class InMemItemRepository implements ItemRepository{
         });
         return item;
     }
-    public void delete(long userId, long itemId) {
+    public Item update(Long userId, Item item, Long itemId){
+        items.get(userId).add(item);
+        return item;
+    }
+    public void delete(Long userId, Long itemId) {
         if (items.containsKey(userId)){
             List<Item> list = items.get(userId);
             list.removeIf(i -> i.getId().equals(itemId));
         }
     }
-    private long getId() {
+    private Long getId() {
         long lastId = items.values()
                 .stream()
                 .flatMap(Collection::stream)

@@ -1,10 +1,13 @@
 package org.personal.User;
 
+import org.personal.User.dto.UserDto;
+
 import java.util.List;
 
 public interface UserService {
-    List<User> getAll();
-    User add(User user);
-    User getById(Long userId);
-    User delete(Long userId);
+    List<UserDto> getAll();
+    UserDto getById(Long userId);
+    UserDto add(UserDto userDto);
+    UserDto update(Long userId, UserDto userDto);
+    UserDto delete(Long userId);
 }

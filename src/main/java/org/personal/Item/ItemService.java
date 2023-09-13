@@ -1,14 +1,12 @@
 package org.personal.Item;
+import org.personal.Item.dto.ItemDto;
 
 import java.util.List;
 
 public interface ItemService {
-    List<ItemDto> getAll(long userId);
-    ItemDto add(long userId, ItemDto itemDto);
-
-    //Item findById(long itemId);
+    List<ItemDto> getAll(Long userId);
     ItemDto getById(Long itemId);
-
-
-    void delete(long userId, long itemId);
+    ItemDto add(Long userId, ItemDto itemDto);
+    ItemDto update(Long userId, Long itemId, ItemDto itemDto);
+    void delete(Long userId, Long itemId);
 }

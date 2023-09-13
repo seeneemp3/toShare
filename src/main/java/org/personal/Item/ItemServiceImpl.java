@@ -1,36 +1,60 @@
 package org.personal.Item;
 
 import lombok.RequiredArgsConstructor;
-import org.personal.User.User;
-import org.personal.User.UserRepository;
-import org.springframework.stereotype.Component;
+import org.personal.Item.dto.ItemDto;
+import org.personal.Item.dto.ItemMapper;
+import org.personal.exeption.UserNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service("ItemServiceImpl")
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService{
-    private final ItemRepository repository;
+    private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
-    @Override
-    public List<ItemDto> getAll(long userId) {
-        return repository.findByUserId(userId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
-    }
-    @Override
-    public ItemDto add(long userId, ItemDto itemDto) {
-        Item item = itemMapper.dtoToItem(itemDto);
-        item.setUserId(userId);
-        return itemMapper.itemToDto(repository.add(item));
-    }
 
+    @Override
+    public List<ItemDto> getAll(Long userId) {
+        return itemRepository.getAll(userId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
     @Override
     public ItemDto getById(Long itemId) {
-        return itemMapper.itemToDto(repository.findById(itemId));
+        return itemMapper.itemToDto(itemRepository.getById(itemId));
+    }
+    @Override
+    public ItemDto add(Long userId, ItemDto itemDto) {
+        Item item = itemMapper.dtoToItem(itemDto);
+        item.setUserId(userId);
+        return itemMapper.itemToDto(itemRepository.add(item));
+    }
+
+
+    public ItemDto update(Long userId, Long itemId, ItemDto itemDto){
+        Item item = itemRepository.getById(itemId);
+        Item newItem = validateBeforeUpdate(userId, item, itemDto);
+        return itemMapper.itemToDto(itemRepository.update(userId, newItem,itemId));
     }
 
     @Override
-    public void delete(long userId, long itemId) {
-        repository.deleteByUserAndItemId(userId, itemId);
+    public void delete(Long userId, Long itemId) {
+        itemRepository.delete(userId, itemId);
+    }
+
+    private Item validateBeforeUpdate(Long userId, Item item, ItemDto itemDto) {
+        if (!userId.equals(item.getUserId())) {
+            throw new UserNotFoundException("Wrong owner");
+        }
+        if (itemDto.getName() != null) {
+            item.setName(itemDto.getName());
+        }
+        if (itemDto.getDescription() != null) {
+            item.setDescription(itemDto.getDescription());
+        }
+        if (itemDto.getAvailable() != null) {
+            item.setAvailable(itemDto.getAvailable());
+        }
+        return item;
     }
 }

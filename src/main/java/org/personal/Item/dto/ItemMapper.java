@@ -1,6 +1,7 @@
-package org.personal.Item;
-import org.mapstruct.Mapper;
-@Mapper(componentModel = "spring")
+package org.personal.Item.dto;
+
+import org.personal.Item.Item;
+
 public interface ItemMapper {
 
     Item dtoToItem(ItemDto itemDto);

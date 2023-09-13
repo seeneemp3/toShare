@@ -1,15 +1,12 @@
-package org.personal.Item;
-
+package org.personal.Item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personal.User.User;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDto {
+public  class ItemDto {
     private Long id;
     private Long owner;
     private String name;

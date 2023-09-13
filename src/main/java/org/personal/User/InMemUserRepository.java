@@ -13,13 +13,17 @@ import java.util.Map;
 @Component("InMemUserRepository")
 public class InMemUserRepository implements UserRepository{
     private Map<Long, User> users = new HashMap<>();;
-    private Long currentId;
 
     @Override
     public List<User> getAll() {
         return users.values().stream().toList();
     }
-
+    public User getById(Long userId) {
+        if (!users.containsKey(userId)) {
+            throw new UserNotFoundException("User with ID=" + userId + " not found!");
+        }
+        return users.get(userId);
+    }
     @Override
     public User add(User user) {
         if (users.values().stream().map(User::getEmail).noneMatch(u -> u.equals(user.getEmail()))) {
@@ -29,14 +33,11 @@ public class InMemUserRepository implements UserRepository{
         }else throw new UserAlreadyExistsException("User with E-mail=" + user.getEmail() + " already exists!");
         return user;
     }
-
-    public User getById(Long userId) {
-        if (!users.containsKey(userId)) {
-            throw new UserNotFoundException("User with ID=" + userId + " not found!");
-        }
-        return users.get(userId);
+    @Override
+    public User update(Long userId, User user) {
+        users.put(userId, user);
+        return user;
     }
-
     public User delete(Long userId){
         if (!users.containsKey(userId)) {
             throw new UserNotFoundException("User with ID=" + userId + " not found!");
