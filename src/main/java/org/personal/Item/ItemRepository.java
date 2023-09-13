@@ -3,10 +3,10 @@ package org.personal.Item;
 import java.util.List;
 
 public interface ItemRepository {
-    List<Item> findByUserId(long userId);
-    Item findById(long itemId);
+    List<Item> getAll(long userId);
+    Item getById(long itemId);
 
     Item add(Item item);
 
-    void deleteByUserAndItemId(long userId, long itemId);
+    void delete(long userId, long itemId);
 }

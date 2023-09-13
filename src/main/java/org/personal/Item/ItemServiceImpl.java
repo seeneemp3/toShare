@@ -1,25 +1,32 @@
 package org.personal.Item;
 
 import lombok.RequiredArgsConstructor;
+import org.personal.User.User;
+import org.personal.User.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService{
     private final ItemRepository repository;
+    private final ItemMapper itemMapper;
     @Override
-    public Item add(long userId, Item item) {
-        item.setUserId(userId);
-        return repository.add(item);
+    public List<ItemDto> getAll(long userId) {
+        return repository.findByUserId(userId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
-    public Item findById(long itemId){
-        repository
+    @Override
+    public ItemDto add(long userId, ItemDto itemDto) {
+        Item item = itemMapper.dtoToItem(itemDto);
+        item.setUserId(userId);
+        return itemMapper.itemToDto(repository.add(item));
     }
 
     @Override
-    public List<Item> getItems(long userId) {
-        return repository.findByUserId(userId);
+    public ItemDto getById(Long itemId) {
+        return itemMapper.itemToDto(repository.findById(itemId));
     }
 
     @Override
