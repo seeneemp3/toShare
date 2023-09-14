@@ -16,30 +16,30 @@ public class UserController {
     @GetMapping
     public List<UserDto> getAll(){
         log.info("Fetching all users");
-        return userService.getAll();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     public UserDto getById(@PathVariable Long userId){
         log.info("Fetching user with ID: {}", userId);
-        return userService.getById(userId);
+        return userService.getUserById(userId);
     }
 
     @PostMapping
     public UserDto add(@RequestBody UserDto userDto){
         log.info("Adding a new user");
-        return userService.add(userDto);
+        return userService.addUser(userDto);
     }
 
     @PatchMapping("/{userId}")
     public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto){
         log.info("Updating user with ID: {}", userId);
-        return userService.update(userId, userDto);
+        return userService.updateUser(userId, userDto);
     }
 
     @DeleteMapping("/{userId}")
-    public UserDto delete(@PathVariable Long userId){
+    public void delete(@PathVariable Long userId){
         log.info("Deleting user with ID: {}", userId);
-        return userService.delete(userId);
+        userService.deleteUser(userId);
     }
 }

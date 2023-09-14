@@ -5,9 +5,9 @@ import org.personal.User.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    List<UserDto> getAll();
-    UserDto getById(Long userId);
-    UserDto add(UserDto userDto);
-    UserDto update(Long userId, UserDto userDto);
-    UserDto delete(Long userId);
+    List<UserDto> getAllUsers();
+    UserDto getUserById(Long userId);
+    UserDto addUser(UserDto userDto);
+    UserDto updateUser(Long userId, UserDto userDto);
+    void deleteUser(Long userId);
 }
