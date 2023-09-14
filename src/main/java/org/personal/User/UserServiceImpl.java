@@ -28,10 +28,11 @@ public class UserServiceImpl implements UserService{
     public UserDto update(Long userId, UserDto userDto){
         User user = userRepository.getById(userId);
         if (userDto.getEmail() != null){
-            userRepository.getAll().stream().map(User::getEmail).filter(u -> userDto.getEmail().equals(u))
-                    .findAny()
-                    .orElseThrow(() -> new UserAlreadyExistsException("user with email " + userDto.getEmail() + " already exists"));
-            user.setEmail(user.getEmail());
+            if (userRepository.getAll().stream().map(User::getEmail).anyMatch(u -> userDto.getEmail().equals(u))){
+              throw new UserAlreadyExistsException("user with email " + userDto.getEmail() + " already exists");
+            }
+            user.setEmail(userDto.getEmail());
+            System.out.println(user.getEmail());
         }
         if(userDto.getName() != null){
             user.setName(user.getName());

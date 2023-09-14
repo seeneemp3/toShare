@@ -15,25 +15,25 @@ public class ItemController {
     private final ItemService itemService;
     @GetMapping
     public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.debug("Getting all items for user with ID: {}", userId);
+        log.info("Getting all items for user with ID: {}", userId);
         return itemService.getAll(userId);
     }
 
     @GetMapping("/{itemId}")
     public ItemDto getById(@PathVariable Long itemId) {
-        log.debug("Getting item by ID: {}", itemId);
+        log.info("Getting item by ID: {}", itemId);
         return itemService.getById(itemId);
     }
 
     @GetMapping("/search")
     public List<ItemDto> search(@RequestParam(name = "text") String text){
-        log.debug("Searching items with text: {}", text);
+        log.info("Searching items with text: {}", text);
         return itemService.search(text);
     }
 
     @PostMapping
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto) {
-        log.debug("Adding a new item for user with ID: {}", userId);
+        log.info("Adding a new item for user with ID: {}", userId);
         return itemService.add(userId, itemDto);
     }
 
@@ -45,7 +45,7 @@ public class ItemController {
 
     @DeleteMapping("/{itemId}")
     public void delete(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable long itemId) {
-        log.debug("Deleting item with ID: {} for user with ID: {}", itemId, userId);
+        log.info("Deleting item with ID: {} for user with ID: {}", itemId, userId);
         itemService.delete(userId, itemId);
     }
 }

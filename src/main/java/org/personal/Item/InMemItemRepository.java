@@ -31,6 +31,7 @@ public class InMemItemRepository implements ItemRepository{
         return item;
     }
     public Item update(Long userId, Item item, Long itemId){
+        items.get(userId).removeIf(i -> i.getId().equals(itemId));
         items.get(userId).add(item);
         return item;
     }
