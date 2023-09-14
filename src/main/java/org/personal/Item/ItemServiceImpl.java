@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public ItemDto add(Long userId, ItemDto itemDto) {
         Item item = itemMapper.dtoToItem(itemDto);
-        item.setUserId(userId);
+        item.setOwnerId(userId);
         return itemMapper.itemToDto(itemRepository.add(item));
     }
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto){
@@ -43,7 +43,7 @@ public class ItemServiceImpl implements ItemService{
     }
 
     private Item validateBeforeUpdate(Long userId, Item item, ItemDto itemDto) {
-        if (!userId.equals(item.getUserId())) {
+        if (!userId.equals(item.getOwnerId())) {
             throw new UserNotFoundException("Wrong owner");
         }
         if (itemDto.getName() != null) {

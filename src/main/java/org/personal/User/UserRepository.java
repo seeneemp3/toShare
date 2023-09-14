@@ -1,5 +1,6 @@
 package org.personal.User;
 
+import org.personal.User.User;
 import org.personal.User.dto.UserDto;
 
 import java.util.List;

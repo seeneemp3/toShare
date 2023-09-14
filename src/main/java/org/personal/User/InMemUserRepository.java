@@ -1,17 +1,15 @@
 package org.personal.User;
 
-import org.personal.Item.Item;
 import org.personal.exeption.InvalidInputDataException;
 import org.personal.exeption.UserAlreadyExistsException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Component("InMemUserRepository")
-public class InMemUserRepository implements UserRepository{
+public class InMemUserRepository implements UserRepository {
     private Map<Long, User> users = new HashMap<>();;
 
     @Override

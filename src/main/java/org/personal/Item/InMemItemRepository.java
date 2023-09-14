@@ -21,7 +21,7 @@ public class InMemItemRepository implements ItemRepository{
    }
     public Item add(Item item) {
         item.setId(getId());
-        items.compute(item.getUserId(), (userId, userItems) -> {
+        items.compute(item.getOwnerId(), (userId, userItems) -> {
             if(userItems == null) {
                 userItems = new ArrayList<>();
             }

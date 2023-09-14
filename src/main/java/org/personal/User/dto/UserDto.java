@@ -19,5 +19,5 @@ public class UserDto {
     @NotBlank
     @NonNull
     private String name;
-    private UserState state;
+    //private UserState state;
 }

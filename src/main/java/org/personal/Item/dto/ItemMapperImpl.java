@@ -13,7 +13,7 @@ public class ItemMapperImpl implements ItemMapper{
 
         Item entity = new Item();
         entity.setId(itemDto.getId());
-        entity.setUserId(itemDto.getOwner());
+        entity.setOwnerId(itemDto.getOwner());
         entity.setName(itemDto.getName());
         entity.setDescription(itemDto.getDescription());
         entity.setAvailable(itemDto.getAvailable());
@@ -29,7 +29,7 @@ public class ItemMapperImpl implements ItemMapper{
 
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
-        dto.setOwner(item.getUserId());
+        dto.setOwner(item.getOwnerId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
         dto.setAvailable(item.getAvailable());
