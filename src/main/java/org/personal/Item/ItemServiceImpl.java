@@ -1,9 +1,16 @@
 package org.personal.Item;
 
 import lombok.RequiredArgsConstructor;
+import org.personal.Item.comment.CommentDto;
+import org.personal.Item.comment.CommentMapper;
+import org.personal.Item.comment.CommentRepository;
 import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapper;
+import org.personal.User.User;
+import org.personal.User.UserRepository;
+import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserNotFoundException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,38 +21,51 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService{
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
     @Override
-    public List<ItemDto> getAll(Long userId) {
-        return itemRepository.getAll(userId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    public List<ItemDto> getAll(Long ownerId) {
+        return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
     @Override
     public ItemDto getById(Long itemId) {
-        return itemMapper.itemToDto(itemRepository.getById(itemId));
+        return itemMapper.itemToDto(itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException("No item with ID = " + itemId + " was found")));
     }
     @Override
     public ItemDto add(Long userId, ItemDto itemDto) {
         Item item = itemMapper.dtoToItem(itemDto);
-        item.setOwnerId(userId);
-        return itemMapper.itemToDto(itemRepository.add(item));
+        item.setOwner(getUser(userId));
+        return itemMapper.itemToDto(itemRepository.save(item));
     }
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto){
-        Item item = itemRepository.getById(itemId);
-        Item newItem = validateBeforeUpdate(userId, item, itemDto);
-        return itemMapper.itemToDto(itemRepository.update(userId, newItem,itemId));
+        Item newItem = validateBeforeUpdate(getItem(itemId), itemDto);
+        newItem.setOwner(getUser(userId));
+        return itemMapper.itemToDto(itemRepository.save(newItem));
     }
     @Override
     public void delete(Long userId, Long itemId) {
-        itemRepository.delete(userId, itemId);
+        itemRepository.deleteById(itemId);
     }
-    public List<ItemDto> search(String query){
-        return itemRepository.search(query).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    public List<ItemDto> search(String keyword){
+        return itemRepository.getItemsByKeyword(keyword).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 
-    private Item validateBeforeUpdate(Long userId, Item item, ItemDto itemDto) {
-        if (!userId.equals(item.getOwnerId())) {
-            throw new UserNotFoundException("Wrong owner");
-        }
+    @Override
+    public CommentDto createComment(Long itemId, Long userId, CommentDto commentDto) {
+        var comm = commentMapper.dtoToComment(commentDto);
+        return  commentMapper.commentToDto(commentRepository.save(comm));
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByItemId(Long itemId) {
+        return commentRepository.findAllByItem_Id(itemId, Sort.by(Sort.Direction.DESC, "created"))
+                .stream().map(commentMapper::commentToDto).toList();
+    }
+
+    private Item validateBeforeUpdate(Item item, ItemDto itemDto) {
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
         }
@@ -56,5 +76,11 @@ public class ItemServiceImpl implements ItemService{
             item.setAvailable(itemDto.getAvailable());
         }
         return item;
+    }
+    private User getUser(Long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with ID = " + userId + " not found"));
+    }
+    private Item getItem(Long itemId){
+        return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("No item with ID = " + itemId + "  was found"));
     }
 }

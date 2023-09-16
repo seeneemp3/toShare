@@ -1,16 +1,13 @@
 package org.personal.Item;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
-public interface ItemRepository {
-    List<Item> getAll(Long userId);
-
-    Item getById(Long itemId);
-
-    Item add(Item item);
-
-    Item update(Long userId, Item item, Long itemId);
-
-    void delete(Long userId, Long itemId);
-    List<Item> search(String query);
+public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findByOwnerId(Long ownerId);
+    @Query("SELECT i FROM Item i WHERE LOWER(i.description) LIKE LOWER(concat('%', :keyword, '%')) OR LOWER(i.name) LIKE LOWER(concat('%', :keyword, '%'))")
+    List<Item> getItemsByKeyword(@Param("keyword") String keyword);
 }

@@ -24,6 +24,11 @@ public class UserController {
         log.info("Fetching user with ID: {}", userId);
         return userService.getUserById(userId);
     }
+    @GetMapping("/e/{email}")
+    public UserDto getByEmail(@PathVariable String email){
+        log.info("Fetching user with email: {}", email);
+        return userService.getUserByEmail(email);
+    }
 
     @PostMapping
     public UserDto add(@RequestBody UserDto userDto){

@@ -2,6 +2,9 @@ package org.personal.Item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.personal.User.User;
+
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public  class ItemDto {
     private Long id;
-    private Long owner;
+    private User owner;
     @NotNull
     @NotBlank
     private String name;
