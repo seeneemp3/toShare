@@ -5,6 +5,7 @@ import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserAlreadyExistsException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,6 +23,12 @@ public class ErrorHandler {
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(", "));
         return new ErrorResponse(messages);
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(final MissingRequestHeaderException e) {
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler

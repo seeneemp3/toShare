@@ -6,7 +6,9 @@ import lombok.NonNull;
 import org.personal.User.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
@@ -21,10 +23,13 @@ public class Item {
     @JoinColumn(name = "owner_id")
     private User owner;
     @Column(name = "item_name")
+    @NotBlank(message = "The name must not be blank")
     private String name;
     @Column
+    @NotNull(message = "The description must not be null")
+    @Size(min = 10, max = 500, message = "The description must be between 10 and 500 characters long")
     private String description;
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "The status must not be null")
     private Boolean available;
 }

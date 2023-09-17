@@ -13,50 +13,66 @@ import org.personal.exeption.UserNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("ItemServiceImpl")
 @RequiredArgsConstructor
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private EntityManager entityManager;
 
     @Override
     public List<ItemDto> getAll(Long ownerId) {
         return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
+
     @Override
     public ItemDto getById(Long itemId) {
         return itemMapper.itemToDto(itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("No item with ID = " + itemId + " was found")));
     }
+
     @Override
     public ItemDto add(Long userId, ItemDto itemDto) {
         Item item = itemMapper.dtoToItem(itemDto);
         item.setOwner(getUser(userId));
         return itemMapper.itemToDto(itemRepository.save(item));
     }
-    public ItemDto update(Long userId, Long itemId, ItemDto itemDto){
-        Item newItem = validateBeforeUpdate(getItem(itemId), itemDto);
+
+    public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
+        Item item = getItem(itemId);
+        if (!item.getOwner().getId().equals(userId)) {
+            throw new UserNotFoundException("Can't update others item");
+        }
+        Item newItem = validateBeforeUpdate(item, itemDto);
+
         newItem.setOwner(getUser(userId));
         return itemMapper.itemToDto(itemRepository.save(newItem));
     }
+
     @Override
     public void delete(Long userId, Long itemId) {
         itemRepository.deleteById(itemId);
     }
-    public List<ItemDto> search(String keyword){
-        return itemRepository.getItemsByKeyword(keyword).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+
+
+
+        public List<ItemDto> search(String keyword){
+        itemRepository.getItemsByKeywordNative(keyword).forEach(System.out::println);
+        return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
+
 
     @Override
     public CommentDto createComment(Long itemId, Long userId, CommentDto commentDto) {
         var comm = commentMapper.dtoToComment(commentDto);
-        return  commentMapper.commentToDto(commentRepository.save(comm));
+        return commentMapper.commentToDto(commentRepository.save(comm));
     }
 
     @Override
@@ -77,10 +93,12 @@ public class ItemServiceImpl implements ItemService{
         }
         return item;
     }
-    private User getUser(Long userId){
+
+    private User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with ID = " + userId + " not found"));
     }
-    private Item getItem(Long itemId){
+
+    private Item getItem(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("No item with ID = " + itemId + "  was found"));
     }
 }

@@ -10,7 +10,7 @@ public interface ItemService {
     ItemDto add(Long userId, ItemDto itemDto);
     ItemDto update(Long userId, Long itemId, ItemDto itemDto);
     void delete(Long userId, Long itemId);
-    List<ItemDto> search(String query);
+    List<ItemDto> search(String keyword);
     CommentDto createComment(Long itemId, Long userId, CommentDto commentDto);
     List<CommentDto> getCommentsByItemId(Long itemId);
 }

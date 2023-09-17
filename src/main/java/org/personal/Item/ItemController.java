@@ -1,11 +1,14 @@
 package org.personal.Item;
 
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personal.Item.dto.ItemDto;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 @Slf4j
 @RestController
@@ -26,13 +29,13 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam(name = "text") String text){
-        log.info("Searching items with text: {}", text);
-        return itemService.search(text);
+    public List<ItemDto> search(@RequestParam(name = "text") String keyword){
+        log.info("Searching items with text: {}", keyword);
+        return itemService.search(keyword);
     }
 
     @PostMapping
-    public ItemDto add(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto) {
+    public ItemDto add(@RequestHeader("X-Sharer-User-Id") @NotNull Long userId, @RequestBody ItemDto itemDto) {
         log.info("Adding a new item for user with ID: {}", userId);
         return itemService.add(userId, itemDto);
     }
