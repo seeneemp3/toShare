@@ -2,6 +2,7 @@ package org.personal.Booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.personal.Booking.BookingStatus;
 import org.personal.Item.Item;
 import org.personal.User.User;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookingDto {
     private Long id;
     private LocalDateTime start;

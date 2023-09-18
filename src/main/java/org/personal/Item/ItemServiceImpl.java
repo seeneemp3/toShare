@@ -29,20 +29,20 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAll(Long ownerId) {
-        return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+        return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public ItemDto getById(Long itemId) {
-        return itemMapper.itemToDto(itemRepository.findById(itemId)
+        return itemMapper.toDto(itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("No item with ID = " + itemId + " was found")));
     }
 
     @Override
     public ItemDto add(Long userId, ItemDto itemDto) {
-        Item item = itemMapper.dtoToItem(itemDto);
+        Item item = itemMapper.fromDto(itemDto);
         item.setOwner(getUser(userId));
-        return itemMapper.itemToDto(itemRepository.save(item));
+        return itemMapper.toDto(itemRepository.save(item));
     }
 
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
         Item newItem = validateBeforeUpdate(item, itemDto);
 
         newItem.setOwner(getUser(userId));
-        return itemMapper.itemToDto(itemRepository.save(newItem));
+        return itemMapper.toDto(itemRepository.save(newItem));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ItemServiceImpl implements ItemService {
 
         public List<ItemDto> search(String keyword){
         itemRepository.getItemsByKeywordNative(keyword).forEach(System.out::println);
-        return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+        return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
 

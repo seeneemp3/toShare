@@ -4,8 +4,8 @@ import org.personal.Item.Item;
 
 public interface ItemMapper {
 
-    Item dtoToItem(ItemDto itemDto);
+    Item fromDto(ItemDto itemDto);
 
-    ItemDto itemToDto(Item item);
+    ItemDto toDto(Item item);
 
 }

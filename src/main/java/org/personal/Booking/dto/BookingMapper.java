@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BookingMapper {
-    private UserServiceImpl userService;
-    private ItemServiceImpl itemService;
-    private UserMapper userMapper;
-    private ItemMapper itemMapper;
+    private final UserServiceImpl userService;
+    private final ItemServiceImpl itemService;
+    private final UserMapper userMapper;
+    private final ItemMapper itemMapper;
 
     public BookingDto toDto(Booking booking) {
         if (booking != null) {
@@ -32,14 +32,18 @@ public class BookingMapper {
         }
     }
     public Booking fromDto(BookingDtoInput bookingDtoInput, Long bookerId) {
-        return new Booking(
-                null,
-                itemMapper.dtoToItem(itemService.getById(bookingDtoInput.getItemId())),
-                bookingDtoInput.getStart(),
-                bookingDtoInput.getEnd(),
-                userMapper.dtoToUser(userService.getUserById(bookerId)),
-                BookingStatus.WAITING
-        );
+        if (bookingDtoInput == null) {
+            return null;
+        }
+        Booking b = new Booking();
+
+        b.setItem(itemMapper.fromDto(itemService.getById(bookingDtoInput.getItemId())));
+        b.setStart(bookingDtoInput.getStart());
+        b.setEnd(bookingDtoInput.getEnd());
+        b.setBooker(userMapper.dtoToUser(userService.getUserById(bookerId)));
+        b.setStatus(BookingStatus.WAITING);
+
+        return b;
     }
 
     public BookingDtoShort toShortDto(Booking booking) {

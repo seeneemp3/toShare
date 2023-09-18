@@ -1,9 +1,6 @@
 package org.personal.handlers;
 
-import org.personal.exeption.InvalidInputDataException;
-import org.personal.exeption.ItemNotFoundException;
-import org.personal.exeption.UserAlreadyExistsException;
-import org.personal.exeption.UserNotFoundException;
+import org.personal.exeption.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +25,17 @@ public class ErrorHandler {
     @ExceptionHandler(MissingRequestHeaderException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final MissingRequestHeaderException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(BookingDataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(final BookingDataException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleBookingNotFoundException(final BookingNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 

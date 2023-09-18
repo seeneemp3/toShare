@@ -3,6 +3,7 @@ package org.personal.Booking;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.personal.Item.Item;
 import org.personal.User.User;
 
@@ -10,9 +11,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "bookings")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Booking {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booking_id")
     private Long id;

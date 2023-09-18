@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ItemMapperImpl implements ItemMapper{
     @Override
-    public Item dtoToItem(ItemDto itemDto) {
+    public Item fromDto(ItemDto itemDto) {
         if (itemDto == null) {
             return null;
         }
@@ -22,7 +22,7 @@ public class ItemMapperImpl implements ItemMapper{
     }
 
     @Override
-    public ItemDto itemToDto(Item item) {
+    public ItemDto toDto(Item item) {
         if (item == null) {
             return null;
         }
