@@ -3,9 +3,11 @@ package org.personal.Booking;
 import lombok.RequiredArgsConstructor;
 import org.personal.Booking.dto.BookingDto;
 import org.personal.Booking.dto.BookingDtoInput;
+import org.personal.Booking.dto.BookingDtoShort;
 import org.personal.Booking.dto.BookingMapper;
 import org.personal.Item.Item;
 import org.personal.Item.ItemService;
+import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapper;
 import org.personal.User.User;
 import org.personal.User.UserService;
@@ -16,18 +18,22 @@ import org.personal.exeption.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
     private final UserService userService;
     private final UserMapper userMapper;
     private final ItemMapper itemMapper;
     private final ItemService itemService;
+
     @Override
     public BookingDto create(BookingDtoInput bookingDto, Long bookerId) {
         Booking booking = bookingMapper.fromDto(bookingDto, bookerId);
@@ -55,7 +61,7 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public BookingDto update(Long bookingId, Long userId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
-                new BookingNotFoundException("Booking with ID = " + bookingId+ " not found"));
+                new BookingNotFoundException("Booking with ID = " + bookingId + " not found"));
 
         if (!booking.getItem().getOwner().getId().equals(userId)) {
             throw new UserNotFoundException("Item owner not found");
@@ -65,14 +71,16 @@ public class BookingServiceImpl implements BookingService{
         }
         if (approved) {
             booking.setStatus(BookingStatus.APPROVED);
-        }else {booking.setStatus(BookingStatus.REJECTED);}
+        } else {
+            booking.setStatus(BookingStatus.REJECTED);
+        }
         return bookingMapper.toDto(bookingRepository.save(booking));
     }
 
     @Override
     public BookingDto getBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
-                new BookingNotFoundException ("No booking found with ID " + bookingId + " for user with ID " + userId + "."));
+                new BookingNotFoundException("No booking found with ID " + bookingId + " for user with ID " + userId + "."));
         Item item = booking.getItem();
         long bookerId = booking.getBooker().getId();
         long ownerId = item.getOwner().getId();
@@ -120,7 +128,23 @@ public class BookingServiceImpl implements BookingService{
             default -> throw new BookingDataException("Invalid booking state");
         };
     }
-    private List<BookingDto> mapList(List<Booking> list){
+
+    @Override
+    public Map<Item, List<BookingDtoShort>> getLastAndNextBooking(Long ownerId) {
+        var map = new HashMap<Item, List<BookingDtoShort>>();
+        itemService.getAll(ownerId).forEach(item -> {
+            BookingDtoShort last = bookingMapper.toShortDto(bookingRepository.findFirstByItem_IdAndBooker_IdAndEndIsBefore(item.getId(), ownerId, LocalDateTime.now()));
+            BookingDtoShort next = bookingMapper.toShortDto(bookingRepository.findFirstByItem_IdAndStartAfterOrderByStartAsc(item.getId(), LocalDateTime.now()));
+            Item i = itemMapper.fromDto(item);
+            map.put(i, new ArrayList<>());
+            var innerMap = map.get(i);
+            innerMap.add(last);
+            innerMap.add(next);
+        });
+        return map;
+    }
+
+    private List<BookingDto> mapList(List<Booking> list) {
         return list.stream().map(bookingMapper::toDto).collect(Collectors.toList());
     }
 

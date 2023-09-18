@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personal.Booking.dto.BookingDto;
 import org.personal.Booking.dto.BookingDtoInput;
+import org.personal.Booking.dto.BookingDtoShort;
+import org.personal.Item.Item;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,6 +18,11 @@ import java.util.List;
 public class BookingController {
     private static final String USER_ID = "X-Sharer-User-Id";
     private final BookingService service;
+
+    @GetMapping("/items")
+    public Map<Item, List<BookingDtoShort>> getLastAndNextBooking(@RequestHeader(USER_ID) Long ownerId) {
+        return service.getLastAndNextBooking(ownerId);
+    }
 
     @PostMapping
     public BookingDto create(@RequestBody BookingDtoInput bookingDtoInput,

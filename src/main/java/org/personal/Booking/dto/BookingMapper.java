@@ -31,6 +31,7 @@ public class BookingMapper {
             return null;
         }
     }
+
     public Booking fromDto(BookingDtoInput bookingDtoInput, Long bookerId) {
         if (bookingDtoInput == null) {
             return null;
