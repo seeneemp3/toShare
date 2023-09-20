@@ -14,22 +14,6 @@ import javax.servlet.Servlet;
 @SpringBootApplication
 public class toShareApp {
     public static void main(String[] args) throws LifecycleException {
-//        var tomcat = new Tomcat();
-//        tomcat.setSilent(true);
-//        tomcat.getConnector().setPort(8080);
-//        Context tomCont = tomcat.addContext("", null);
-//
-//        var context = new AnnotationConfigWebApplicationContext();
-//        context.setServletContext(tomCont.getServletContext());
-//        context.scan("org.personal");
-//        context.refresh();
-//
-//        var dispatcherServlet = new DispatcherServlet(context);
-//        Wrapper dispWrapper = Tomcat.addServlet(tomCont, "dispatcher", dispatcherServlet);
-//        dispWrapper.addMapping("/");
-//        dispWrapper.setLoadOnStartup(1);
-//
-//        tomcat.start();
         SpringApplication.run(toShareApp.class, args);
     }
 }

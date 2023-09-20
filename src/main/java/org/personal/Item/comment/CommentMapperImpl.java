@@ -14,7 +14,7 @@ public class CommentMapperImpl implements CommentMapper{
             Comment comment = new Comment();
             comment.setId(commentDto.getId());
             comment.setText(commentDto.getText());
-            comment.setCreatedTime(commentDto.getCreated());
+            comment.setCreated(commentDto.getCreated());
 
 
             Item item = new Item();
@@ -36,7 +36,7 @@ public class CommentMapperImpl implements CommentMapper{
             CommentDto commentDto = new CommentDto();
             commentDto.setId(comment.getId());
             commentDto.setText(comment.getText());
-            commentDto.setCreated(comment.getCreatedTime());
+            commentDto.setCreated(comment.getCreated());
             commentDto.setItem(comment.getItem());
             commentDto.setAuthorName(comment.getAuthor().getName());
 

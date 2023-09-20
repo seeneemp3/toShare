@@ -1,9 +1,9 @@
-package org.personal.Booking.dto;
+package org.personal.booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personal.Booking.BookingStatus;
+import org.personal.booking.BookingStatus;
 import org.personal.Item.Item;
 import org.personal.User.User;
 

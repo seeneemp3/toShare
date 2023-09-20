@@ -1,4 +1,4 @@
-package org.personal.Booking;
+package org.personal.booking;
 
 public enum BookingStatus {
     WAITING,

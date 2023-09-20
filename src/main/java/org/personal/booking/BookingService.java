@@ -1,11 +1,10 @@
-package org.personal.Booking;
+package org.personal.booking;
 
-import org.personal.Booking.dto.BookingDto;
-import org.personal.Booking.dto.BookingDtoInput;
-import org.personal.Booking.dto.BookingDtoShort;
+import org.personal.booking.dto.BookingDto;
+import org.personal.booking.dto.BookingDtoInput;
+import org.personal.booking.dto.BookingDtoShort;
 import org.personal.Item.Item;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 

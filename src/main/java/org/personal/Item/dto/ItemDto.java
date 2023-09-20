@@ -2,11 +2,13 @@ package org.personal.Item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.personal.Item.comment.CommentDto;
 import org.personal.User.User;
 
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Data
@@ -22,5 +24,6 @@ public  class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+    private List<CommentDto> comments;
 
 }

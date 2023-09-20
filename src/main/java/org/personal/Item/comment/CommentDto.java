@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CommentDto {
     private Long id;
-    @NotEmpty
-    @NotBlank
+    @NotEmpty(message = "Comment must not be empty")
+    @NotBlank(message = "Comment must not be empty")
     private String text;
     //@JsonIgnore
     private Item item;

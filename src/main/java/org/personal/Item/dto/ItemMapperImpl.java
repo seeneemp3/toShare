@@ -1,10 +1,19 @@
 package org.personal.Item.dto;
 
+import lombok.RequiredArgsConstructor;
 import org.personal.Item.Item;
+import org.personal.Item.comment.CommentMapper;
+import org.personal.Item.comment.CommentRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
+@RequiredArgsConstructor
 public class ItemMapperImpl implements ItemMapper{
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
     @Override
     public Item fromDto(ItemDto itemDto) {
         if (itemDto == null) {
@@ -33,6 +42,8 @@ public class ItemMapperImpl implements ItemMapper{
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
         dto.setAvailable(item.getAvailable());
+        dto.setComments(commentRepository.findAllByItem_Id(dto.getId(), Sort.unsorted())
+                .stream().map(commentMapper::commentToDto).collect(Collectors.toList()));
 
         return dto;
     }

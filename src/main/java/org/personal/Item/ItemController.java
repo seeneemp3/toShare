@@ -4,6 +4,7 @@ package org.personal.Item;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.personal.Item.comment.CommentDto;
 import org.personal.Item.dto.ItemDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +49,18 @@ public class ItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public void delete(@RequestHeader(USER_ID) Long userId, @PathVariable long itemId) {
+    public void delete(@RequestHeader(USER_ID) Long userId, @PathVariable Long itemId) {
         log.info("Deleting item with ID: {} for user with ID: {}", itemId, userId);
         itemService.delete(userId, itemId);
+    }
+    @PostMapping("/{itemId}/comment")
+    public CommentDto createComment(@RequestHeader(USER_ID) Long userId,
+                                    @PathVariable Long itemId,
+                                    @RequestBody @Valid CommentDto comment) {
+        return itemService.createComment(userId, itemId, comment);
+    }
+    @GetMapping("/{itemId}/comment")
+    public List<CommentDto> getCommentsByItemId(@PathVariable Long itemId){
+       return itemService.getCommentsByItemId(itemId);
     }
 }

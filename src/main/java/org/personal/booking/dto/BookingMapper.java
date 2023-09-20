@@ -1,8 +1,8 @@
-package org.personal.Booking.dto;
+package org.personal.booking.dto;
 
 import lombok.RequiredArgsConstructor;
-import org.personal.Booking.Booking;
-import org.personal.Booking.BookingStatus;
+import org.personal.booking.Booking;
+import org.personal.booking.BookingStatus;
 import org.personal.Item.ItemServiceImpl;
 import org.personal.Item.dto.ItemMapper;
 import org.personal.User.UserServiceImpl;

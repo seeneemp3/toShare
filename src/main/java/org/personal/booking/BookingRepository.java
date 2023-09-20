@@ -1,6 +1,8 @@
-package org.personal.Booking;
+package org.personal.booking;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,4 +33,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findFirstByItem_IdAndBooker_IdAndEndIsBefore(Long itemId, Long userId,
                                                                   LocalDateTime now);
+    @Query("SELECT b.id FROM Booking b WHERE b.item.id = :itemId AND b.booker.id = :bookerId")
+    List<Long> findBookingIdsByItemIdAndBookerId(@Param("itemId") Long itemId, @Param("bookerId") Long bookerId);
 }

@@ -1,4 +1,4 @@
-package org.personal.Booking.dto;
+package org.personal.booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

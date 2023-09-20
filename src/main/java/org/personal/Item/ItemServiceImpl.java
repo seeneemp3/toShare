@@ -1,6 +1,10 @@
 package org.personal.Item;
 
 import lombok.RequiredArgsConstructor;
+import org.personal.User.UserService;
+import org.personal.User.dto.UserMapper;
+import org.personal.booking.Booking;
+import org.personal.booking.BookingRepository;
 import org.personal.Item.comment.CommentDto;
 import org.personal.Item.comment.CommentMapper;
 import org.personal.Item.comment.CommentRepository;
@@ -8,12 +12,13 @@ import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapper;
 import org.personal.User.User;
 import org.personal.User.UserRepository;
+import org.personal.exeption.BookingDataException;
 import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +30,9 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
-    private EntityManager entityManager;
-
+    private final BookingRepository bookingRepository;
+    private final UserService userService;
+    private final UserMapper userMapper;
     @Override
     public List<ItemDto> getAll(Long ownerId) {
         return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::toDto).collect(Collectors.toList());
@@ -60,19 +66,25 @@ public class ItemServiceImpl implements ItemService {
     public void delete(Long userId, Long itemId) {
         itemRepository.deleteById(itemId);
     }
-
-
-
-        public List<ItemDto> search(String keyword){
+    public List<ItemDto> search(String keyword){
         itemRepository.getItemsByKeywordNative(keyword).forEach(System.out::println);
         return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
 
     @Override
-    public CommentDto createComment(Long itemId, Long userId, CommentDto commentDto) {
-        var comm = commentMapper.dtoToComment(commentDto);
-        return commentMapper.commentToDto(commentRepository.save(comm));
+    public CommentDto createComment(Long userId, Long itemId, CommentDto commentDto) {
+        User author = userMapper.dtoToUser(userService.getUserById(userId));
+        Item item = itemMapper.fromDto(getById(itemId));
+        List<Long> bookings = bookingRepository.findBookingIdsByItemIdAndBookerId(itemId, userId);
+        if (bookings.isEmpty()) {
+            throw new BookingDataException("Can't leve comment without booking");
+        }
+        var comment = commentMapper.dtoToComment(commentDto);
+        comment.setItem(item);
+        comment.setAuthor(author);
+        comment.setCreated(LocalDateTime.now());
+        return commentMapper.commentToDto(commentRepository.save(comment));
     }
 
     @Override

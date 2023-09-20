@@ -1,4 +1,4 @@
-package org.personal.handlers;
+package org.personal.handler;
 
 public record ErrorResponse(String error) {
 }

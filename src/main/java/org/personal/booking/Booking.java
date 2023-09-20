@@ -1,4 +1,4 @@
-package org.personal.Booking;
+package org.personal.booking;
 
 
 import lombok.AllArgsConstructor;
