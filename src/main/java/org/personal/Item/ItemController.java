@@ -57,10 +57,12 @@ public class ItemController {
     public CommentDto createComment(@RequestHeader(USER_ID) Long userId,
                                     @PathVariable Long itemId,
                                     @RequestBody @Valid CommentDto comment) {
+        log.info("Creating a new comment for item with ID: {}, by user with ID: {}", itemId, userId);
         return itemService.createComment(userId, itemId, comment);
     }
     @GetMapping("/{itemId}/comment")
     public List<CommentDto> getCommentsByItemId(@PathVariable Long itemId){
+        log.info("Fetching comments for item with ID: {}", itemId);
        return itemService.getCommentsByItemId(itemId);
     }
 }

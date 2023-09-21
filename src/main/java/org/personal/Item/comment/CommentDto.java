@@ -1,8 +1,6 @@
 package org.personal.Item.comment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.personal.Item.Item;
 
@@ -17,7 +15,6 @@ public class CommentDto {
     @NotEmpty(message = "Comment must not be empty")
     @NotBlank(message = "Comment must not be empty")
     private String text;
-    //@JsonIgnore
     private Item item;
     private String authorName;
     private LocalDateTime created;
