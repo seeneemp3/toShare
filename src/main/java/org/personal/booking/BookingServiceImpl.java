@@ -105,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
                     mapList(bookingRepository.findAllByBooker_IdAndStatusOrderByStart(userId, BookingStatus.WAITING));
             case "REJECTED" ->
                     mapList(bookingRepository.findAllByBooker_IdAndStatusOrderByStart(userId, BookingStatus.REJECTED));
-            default -> throw new BookingDataException("Invalid booking state");
+            default -> throw new BookingDataException("Unknown state: "+ state);
         };
     }
 
@@ -124,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
                     mapList(bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStart(ownerId, BookingStatus.WAITING));
             case "REJECTED" ->
                     mapList(bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStart(ownerId, BookingStatus.REJECTED));
-            default -> throw new BookingDataException("Invalid booking state");
+            default -> throw new BookingDataException("Unknown state: "+ state);
         };
     }
 

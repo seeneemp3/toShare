@@ -19,8 +19,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+//TODO check validation on endpoints
+//todo remove unnecessary validation
+//todo json ignore
+//todo postman testing
 
 @Service("ItemServiceImpl")
 @RequiredArgsConstructor
@@ -67,6 +73,9 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(itemId);
     }
     public List<ItemDto> search(String keyword){
+        if(keyword.isEmpty()){
+            return Collections.emptyList();
+        }
         itemRepository.getItemsByKeywordNative(keyword).forEach(System.out::println);
         return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
@@ -76,9 +85,9 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto createComment(Long userId, Long itemId, CommentDto commentDto) {
         User author = userMapper.dtoToUser(userService.getUserById(userId));
         Item item = itemMapper.fromDto(getById(itemId));
-        List<Long> bookings = bookingRepository.findBookingIdsByItemIdAndBookerId(itemId, userId);
-        if (bookings.isEmpty()) {
-            throw new BookingDataException("Can't leve comment without booking");
+        Booking booking = bookingRepository.findFirstByItem_IdAndBooker_IdAndEndIsBefore(itemId, userId, LocalDateTime.now());
+        if (booking == null) {
+            throw new BookingDataException("Can't leave comment without booking");
         }
         var comment = commentMapper.dtoToComment(commentDto);
         comment.setItem(item);
