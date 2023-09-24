@@ -3,12 +3,15 @@ package org.personal.Item;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.personal.Item.comment.Comment;
 import org.personal.User.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,4 +35,6 @@ public class Item {
     @Column(nullable = false)
     @NotNull(message = "The status must not be null")
     private Boolean available;
+    @Column(name = "request_id")
+    private Long requestId;
 }

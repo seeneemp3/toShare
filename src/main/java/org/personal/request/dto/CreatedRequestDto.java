@@ -12,6 +12,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CreatedRequestDto {
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "The description must not be empty")
     String description;
 }

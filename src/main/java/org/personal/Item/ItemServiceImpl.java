@@ -98,8 +98,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<CommentDto> getCommentsByItemId(Long itemId) {
-        return commentRepository.findAllByItem_Id(itemId, Sort.by(Sort.Direction.DESC, "created"))
+
+        List<CommentDto> comments = commentRepository.findAllByItem_Id(itemId, Sort.by(Sort.Direction.DESC, "created"))
                 .stream().map(commentMapper::commentToDto).toList();
+
+        if(comments.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return comments;
     }
 
     private Item validateBeforeUpdate(Item item, ItemDto itemDto) {

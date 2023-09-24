@@ -42,6 +42,11 @@ public class ErrorHandler {
     public ErrorResponse handleValidationException(final MissingRequestHeaderException e) {
         return new ErrorResponse(e.getMessage());
     }
+    @ExceptionHandler(RequestNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(final RequestNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 
     @ExceptionHandler(BookingDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

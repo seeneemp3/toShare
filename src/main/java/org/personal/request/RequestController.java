@@ -6,7 +6,10 @@ import org.personal.request.dto.CreatedRequestDto;
 import org.personal.request.dto.RequestDto;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/requests")
@@ -16,7 +19,21 @@ public class RequestController {
     private final RequestService requestService;
 
     @PostMapping
-    public RequestDto add(@RequestHeader(USER_ID) Long userId, @RequestBody CreatedRequestDto createdRequestDto) {
+    public RequestDto add(@RequestHeader(USER_ID) Long userId, @Valid @RequestBody CreatedRequestDto createdRequestDto) {
         return requestService.create(userId, createdRequestDto);
+    }
+    @GetMapping
+    public List<RequestDto> findAllById(@RequestHeader(USER_ID) Long userId){
+        return requestService.findAllById(userId);
+    }
+    @GetMapping("/{requestId}")
+    RequestDto findById(@PathVariable Long requestId, @RequestHeader(USER_ID) Long userId){
+       return requestService.findById(requestId, userId);
+    }
+    @GetMapping("/all")
+    List<RequestDto> getAllLimit(@RequestHeader(USER_ID) Long userId,
+                                 @RequestParam(required = false, defaultValue = "0") Integer from,
+                                 @RequestParam(required = false, defaultValue = "1") Integer size){
+       return requestService.getAllLimit(userId,from,size);
     }
 }
