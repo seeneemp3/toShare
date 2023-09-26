@@ -22,9 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with ID = " + userId + " not found"));
-        return userMapper.toDto(user);
+        return userMapper.toDto(getUser(userId));
     }
 
     public UserDto getUserByEmail(String email) {
@@ -34,16 +32,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto addUser(UserDto userDto) {
-        userRepository.getByEmail(userDto.getEmail()).ifPresent(user -> {
-            throw new UserAlreadyExistsException("User with email = " + userDto.getEmail() + " already exist");
-        });
+        emailDuplicationCheck(userDto.getEmail());
         User user = userMapper.fromDto(userDto);
         return userMapper.toDto(userRepository.save(user));
     }
 
     public UserDto updateUser(Long id, UserDto userDto) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("user with ID = " + id + " not found"));
+        User user = getUser(id);
         if (userDto.getEmail() != null) {
             emailDuplicationCheck(userDto.getEmail());
             user.setEmail(userDto.getEmail());
@@ -55,15 +50,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("user ID = " + id + " not found"));
-        userRepository.delete(user);
+        userRepository.delete(getUser(id));
     }
 
     private void emailDuplicationCheck(String email) {
         userRepository.getByEmail(email).ifPresent(user -> {
             throw new UserAlreadyExistsException("User with email = " + email + " already exist");
         });
+    }
+    private User getUser(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with ID = " + userId + " not found"));
     }
 
 
