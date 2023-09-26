@@ -41,7 +41,7 @@ public class BookingMapper {
         b.setItem(itemMapper.fromDto(itemService.getById(bookingDtoInput.getItemId())));
         b.setStart(bookingDtoInput.getStart());
         b.setEnd(bookingDtoInput.getEnd());
-        b.setBooker(userMapper.dtoToUser(userService.getUserById(bookerId)));
+        b.setBooker(userMapper.fromDto(userService.getUserById(bookerId)));
         b.setStatus(BookingStatus.WAITING);
 
         return b;

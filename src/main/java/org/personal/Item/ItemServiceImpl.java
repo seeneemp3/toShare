@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto createComment(Long userId, Long itemId, CommentDto commentDto) {
-        User author = userMapper.dtoToUser(userService.getUserById(userId));
+        User author = userMapper.fromDto(userService.getUserById(userId));
         Item item = itemMapper.fromDto(getById(itemId));
         Booking booking = bookingRepository.findFirstByItem_IdAndBooker_IdAndEndIsBefore(itemId, userId, LocalDateTime.now());
         if (booking == null) {

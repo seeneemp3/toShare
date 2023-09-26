@@ -1,4 +1,4 @@
-# toShare
+# 🔄 toShare 🔄
 
 ## Overview
 toShare is an easy-to-use platform that lets people swap items with each other. It's all about helping you find what you need and share what you don't, all while being part of a community that values reusing and sharing.

@@ -6,21 +6,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapperImpl implements UserMapper{
     @Override
-    public User dtoToUser(UserDto userDto) {
+    public User fromDto(UserDto userDto) {
         if (userDto == null) {
             return null;
         }
 
         User user = new User();
         user.setId(userDto.getId());
-        user.setEmail(userDto.getEmail());
         user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+
 
         return user;
     }
 
     @Override
-    public UserDto userToDto(User user) {
+    public UserDto toDto(User user) {
         if (user == null) {
             return null;
         }

@@ -3,7 +3,7 @@ import org.personal.User.User;
 
 public interface UserMapper {
 
-    User dtoToUser(UserDto userDto);
+    User fromDto(UserDto userDto);
 
-    UserDto userToDto(User user);
+    UserDto toDto(User user);
 }

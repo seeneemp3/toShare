@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto create(BookingDtoInput bookingDto, Long bookerId) {
         Booking booking = bookingMapper.fromDto(bookingDto, bookerId);
-        User booker = userMapper.dtoToUser(userService.getUserById(bookerId));
+        User booker = userMapper.fromDto(userService.getUserById(bookerId));
         Item item = itemMapper.fromDto(itemService.getById(bookingDto.getItemId()));
         User owner = item.getOwner();
 

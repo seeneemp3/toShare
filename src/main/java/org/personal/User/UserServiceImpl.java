@@ -18,27 +18,27 @@ public class UserServiceImpl implements UserService {
 
 
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::userToDto).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
     public UserDto getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with ID = " + userId + " not found"));
-        return userMapper.userToDto(user);
+        return userMapper.toDto(user);
     }
 
     public UserDto getUserByEmail(String email) {
         User u = (User) userRepository.getByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email = " + email + " not found"));
-        return userMapper.userToDto(u);
+        return userMapper.toDto(u);
     }
 
     public UserDto addUser(UserDto userDto) {
         userRepository.getByEmail(userDto.getEmail()).ifPresent(user -> {
             throw new UserAlreadyExistsException("User with email = " + userDto.getEmail() + " already exist");
         });
-        User user = userMapper.dtoToUser(userDto);
-        return userMapper.userToDto(userRepository.save(user));
+        User user = userMapper.fromDto(userDto);
+        return userMapper.toDto(userRepository.save(user));
     }
 
     public UserDto updateUser(Long id, UserDto userDto) {
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getName() != null && !userDto.getName().isEmpty() && !userDto.getName().isBlank()) {
             user.setName(userDto.getName());
         }
-        return userMapper.userToDto(userRepository.save(user));
+        return userMapper.toDto(userRepository.save(user));
     }
 
     public void deleteUser(Long id) {
