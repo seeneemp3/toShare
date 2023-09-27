@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+    //TODO email as pathvar???
     private final UserService userService;
 
     @GetMapping
