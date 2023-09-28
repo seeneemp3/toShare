@@ -1,5 +1,6 @@
 package org.personal.Item.comment;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.personal.Item.Item;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class CommentDto {
     private Long id;

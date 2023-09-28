@@ -1,8 +1,6 @@
 package org.personal.Item;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.personal.Item.comment.Comment;
 import org.personal.User.User;
 
@@ -12,7 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
+@AllArgsConstructor
 @Data
 @Entity
 @Table(name="items")

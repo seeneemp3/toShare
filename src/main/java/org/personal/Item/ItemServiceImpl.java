@@ -13,6 +13,7 @@ import org.personal.Item.dto.ItemMapper;
 import org.personal.User.User;
 import org.personal.User.UserRepository;
 import org.personal.exeption.BookingDataException;
+import org.personal.exeption.InvalidInputDataException;
 import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.data.domain.Sort;
@@ -41,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserMapper userMapper;
     @Override
     public List<ItemDto> getAll(Long ownerId) {
-        return itemRepository.findByOwnerId(ownerId).stream().map(itemMapper::toDto).collect(Collectors.toList());
+        return itemRepository.findByOwnerId(getUser(ownerId).getId()).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -53,8 +54,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto add(Long userId, ItemDto itemDto) {
         Item item = itemMapper.fromDto(itemDto);
+        Item newItem = validateBeforeUpdate(item, itemDto);
         item.setOwner(getUser(userId));
-        return itemMapper.toDto(itemRepository.save(item));
+        return itemMapper.toDto(itemRepository.save(newItem));
     }
 
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
@@ -109,12 +111,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Item validateBeforeUpdate(Item item, ItemDto itemDto) {
-        if (itemDto.getName() != null) {
+        if (itemDto.getName() != null && !itemDto.getName().isEmpty()) {
             item.setName(itemDto.getName());
-        }
-        if (itemDto.getDescription() != null) {
+        }else throw new InvalidInputDataException("Name should not be blank");
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isEmpty()) {
             item.setDescription(itemDto.getDescription());
-        }
+        }else throw new InvalidInputDataException("Description should not be blank");
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }

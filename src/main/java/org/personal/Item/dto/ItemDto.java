@@ -1,5 +1,6 @@
 package org.personal.Item.dto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.personal.Item.comment.CommentDto;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
