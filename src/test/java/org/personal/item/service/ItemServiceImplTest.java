@@ -13,14 +13,18 @@ import org.personal.Item.ItemRepository;
 import org.personal.Item.ItemServiceImpl;
 import org.personal.Item.comment.Comment;
 import org.personal.Item.comment.CommentDto;
+import org.personal.Item.comment.CommentMapper;
 import org.personal.Item.comment.CommentRepository;
 import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapperImpl;
 import org.personal.User.User;
 import org.personal.User.UserRepository;
+import org.personal.User.UserServiceImpl;
+import org.personal.User.dto.UserMapperImpl;
 import org.personal.booking.Booking;
 import org.personal.booking.BookingRepository;
 import org.personal.booking.BookingStatus;
+import org.personal.exeption.BookingDataException;
 import org.personal.exeption.InvalidInputDataException;
 import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserNotFoundException;
@@ -34,7 +38,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -50,9 +55,15 @@ public class ItemServiceImplTest {
     @Mock
     private UserRepository userRepository;
     @Mock
+    private UserServiceImpl userService;
+    @Mock
+    private UserMapperImpl userMapper;
+    @Mock
     private BookingRepository bookingRepository;
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private CommentMapper commentMapper;
     @Mock
     private RequestRepository requestRepository;
 
@@ -60,10 +71,12 @@ public class ItemServiceImplTest {
     private Booking booking;
     private Item item;
     private CommentDto commentDto;
+    private Comment comment;
     private Request request;
     private ItemDto itemDto;
+
     @BeforeEach
-    void setup(){
+    void setup() {
         user = User.builder()
                 .id(1L)
                 .name("user")
@@ -73,18 +86,23 @@ public class ItemServiceImplTest {
         booking = new Booking(1L, item,
                 LocalDateTime.of(2023, Month.FEBRUARY, 1, 12, 0),
                 LocalDateTime.of(2023, Month.FEBRUARY, 2, 12, 0),
-                user, BookingStatus.WAITING);
+                user, BookingStatus.APPROVED);
 
-        request = new Request(1L,"user2", user, LocalDateTime.now());
-        item = new Item(1L,user,"item1","item1",true, request.getId());
-        itemDto = new ItemDto(1L,user,"item1","item1",true, null,request.getId());
+        request = new Request(1L, "user2", user, LocalDateTime.now());
+        item = new Item(1L, user, "item1", "item1", true, request.getId());
         commentDto = new CommentDto(1L, "commentText", item, user.getName(), LocalDateTime.now());
+        itemDto = new ItemDto(1L, user, "item1", "item1", true, List.of(commentDto), request.getId());
+        comment = new Comment(1L, "commentText", LocalDateTime.now(), item, user);
 
         when(itemMapper.toDto(any(Item.class))).thenReturn(itemDto);
         when(itemMapper.fromDto(any(ItemDto.class))).thenReturn(item);
+
+        when(commentMapper.dtoToComment(any(CommentDto.class))).thenReturn(comment);
+        when(commentMapper.commentToDto(any(Comment.class))).thenReturn(commentDto);
     }
+
     @Test
-    public void getAll(){
+    public void getAll() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(itemRepository.findByOwnerId(user.getId())).thenReturn(List.of(item));
 
@@ -96,15 +114,17 @@ public class ItemServiceImplTest {
 
         assertThrows(UserNotFoundException.class, () -> service.getAll(3L));
     }
+
     @Test
-    public void getById(){
+    public void getById() {
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         assertEquals(service.getById(1L), itemMapper.toDto(item));
 
         assertThrows(ItemNotFoundException.class, () -> service.getById(3L));
     }
+
     @Test
-    public void add(){
+    public void add() {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         assertThrows(UserNotFoundException.class, () -> service.add(999L, itemDto));
         when(requestRepository.findById(1L)).thenReturn(Optional.of(request));
@@ -123,10 +143,11 @@ public class ItemServiceImplTest {
             service.add(user.getId(), itemDto);
         });
     }
+
     @Test
-    public void update(){
+    public void update() {
         ItemDto itemDto = itemMapper.toDto(item);
-        user.setId(user.getId()+1);
+        user.setId(user.getId() + 1);
 
         ItemDto updatedItemDto = ItemDto.builder()
                 .id(1L)
@@ -140,14 +161,11 @@ public class ItemServiceImplTest {
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(requestRepository.findById(anyLong())).thenReturn(Optional.of(request));
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        System.out.println(service.update(2L, 1L, updatedItemDto));
         assertEquals(request.getId(), service.update(2L, 1L, updatedItemDto).getRequestId());
 
         when(itemRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> {
-            service.update(1L, 1L, itemDto);
-        });
+        assertThrows(ItemNotFoundException.class, () ->
+                service.update(1L, 1L, itemDto));
 
         when(itemRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ItemNotFoundException.class, () -> {
@@ -155,39 +173,62 @@ public class ItemServiceImplTest {
             service.update(1L, 1L, itemDto);
         });
 
-//        when(itemRepository.findById(1L)).thenReturn(Optional.of(Item.builder()
-//                .id(1L)
-//                .name("item1")
-//                .description("item1")
-//                .owner(User.builder().id(1000L).build())
-//                .request(itemRequest)
-//                .available(true)
-//                .build()));
-//
-//        assertThrows(ObjectNotFoundException.class, () -> {
-//            itemService.updateItem(1L, 1L, itemDto);
-//        });
-//
-//        when(itemRequestRepository.findById(anyLong())).thenReturn(Optional.empty());
-//        assertThrows(ObjectNotFoundException.class, () -> {
-//            itemService.updateItem(1L, 1L, updatedItemDto);
-//        });
-    }
-    @Test
-    public void delete(){
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(Item.builder()
+                .id(1L)
+                .name("item1")
+                .description("item1")
+                .owner(User.builder().id(1000L).build())
+                .requestId(request.getId())
+                .available(true)
+                .build()));
 
-    }
-    @Test
-    public void search(){
+        assertThrows(UserNotFoundException.class, () -> {
+            service.update(1L, 1L, itemDto);
+        });
 
+        when(requestRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> {
+            service.update(1L, 1L, updatedItemDto);
+        });
     }
-    @Test
-    public void createComment(){
 
+    @Test
+    public void delete() {
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
+        assertDoesNotThrow(() -> service.delete(1L, 1L));
+        assertThrows(ItemNotFoundException.class, () -> service.delete(1L, 999L));
     }
-    @Test
-    public void getCommentsByItemId(){
 
+    @Test
+    public void search() {
+        when(itemRepository.getItemsByKeywordNative("item1")).thenReturn(List.of(item));
+        List<ItemDto> items = service.search("item1");
+        assertNotNull(items);
+        assertEquals(1, items.size());
+        assertEquals("item1", items.get(0).getName());
+
+        items = service.search("");
+        assertTrue(items.isEmpty());
+    }
+
+    @Test
+    public void createComment() {
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
+        when(commentRepository.save(any(Comment.class))).thenReturn(new Comment());
+        assertThrows(BookingDataException.class, () -> service.createComment(1L, 1L, commentDto));
+        assertThrows(ItemNotFoundException.class, () -> service.createComment(1L, 999L, commentDto));
+        when(bookingRepository.findFirstByItem_IdAndBooker_IdAndEndIsBefore(anyLong(), anyLong(), any(LocalDateTime.class)))
+                .thenReturn(booking);
+
+        assertDoesNotThrow(() -> service.createComment(1L, 1L, commentDto));
+    }
+
+    @Test
+    public void getCommentsByItemId() {
+        when(commentRepository.findAllByItem_Id(anyLong(), any(Sort.class))).thenReturn(List.of(comment));
+        List<CommentDto> comments = service.getCommentsByItemId(1L);
+        assertNotNull(comments);
+        assertEquals(1, comments.size());
     }
 }
 

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,20 +66,19 @@ public class ItemServiceImpl implements ItemService {
             throw new UserNotFoundException("Can't update others item");
         }
         Item newItem = validateBeforeUpdate(item, itemDto);
-
+        itemRepository.save(newItem);
         newItem.setOwner(getUser(userId));
-        return itemMapper.toDto(itemRepository.save(newItem));
+        return itemMapper.toDto(newItem);
     }
 
     @Override
     public void delete(Long userId, Long itemId) {
-        itemRepository.deleteById(itemId);
+        itemRepository.deleteById(getItem(itemId).getId());
     }
     public List<ItemDto> search(String keyword){
         if(keyword.isEmpty()){
             return Collections.emptyList();
         }
-        itemRepository.getItemsByKeywordNative(keyword).forEach(System.out::println);
         return itemRepository.getItemsByKeywordNative(keyword).stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
