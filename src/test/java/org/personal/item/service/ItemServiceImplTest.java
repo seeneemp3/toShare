@@ -44,7 +44,6 @@ import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
-
 public class ItemServiceImplTest {
     @InjectMocks
     private ItemServiceImpl service;
@@ -77,19 +76,20 @@ public class ItemServiceImplTest {
 
     @BeforeEach
     void setup() {
+
         user = User.builder()
                 .id(1L)
                 .name("user")
                 .email("user@user.com")
                 .build();
+        request = new Request(1L, "user2", user, LocalDateTime.now());
+        item = new Item(1L, user, "item1", "item1", true, request.getId());
 
         booking = new Booking(1L, item,
                 LocalDateTime.of(2023, Month.FEBRUARY, 1, 12, 0),
                 LocalDateTime.of(2023, Month.FEBRUARY, 2, 12, 0),
                 user, BookingStatus.APPROVED);
 
-        request = new Request(1L, "user2", user, LocalDateTime.now());
-        item = new Item(1L, user, "item1", "item1", true, request.getId());
         commentDto = new CommentDto(1L, "commentText", item, user.getName(), LocalDateTime.now());
         itemDto = new ItemDto(1L, user, "item1", "item1", true, List.of(commentDto), request.getId());
         comment = new Comment(1L, "commentText", LocalDateTime.now(), item, user);

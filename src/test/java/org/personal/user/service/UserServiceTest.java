@@ -37,7 +37,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setup() {
-        userDto = new UserDto(1L, "org/personal/user", "user@user.com");
+        userDto = new UserDto(1L, "user", "user@user.com");
         user = User.builder()
                 .id(1L)
                 .name("org/personal/user")

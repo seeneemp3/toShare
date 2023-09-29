@@ -1,12 +1,12 @@
 package org.personal.booking.dto;
 
 import lombok.RequiredArgsConstructor;
-import org.personal.booking.Booking;
-import org.personal.booking.BookingStatus;
 import org.personal.Item.ItemServiceImpl;
 import org.personal.Item.dto.ItemMapper;
 import org.personal.User.UserServiceImpl;
 import org.personal.User.dto.UserMapper;
+import org.personal.booking.Booking;
+import org.personal.booking.BookingStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -59,6 +59,4 @@ public class BookingMapper {
             return null;
         }
     }
-
-
 }
