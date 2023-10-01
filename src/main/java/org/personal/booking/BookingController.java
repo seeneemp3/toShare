@@ -19,11 +19,6 @@ public class BookingController {
     private static final String USER_ID = "X-Sharer-User-Id";
     private final BookingService service;
 
-    @GetMapping("/items")
-    public Map<Item, List<BookingDtoShort>> getLastAndNextBooking(@RequestHeader(USER_ID) Long ownerId) {
-        return service.getLastAndNextBooking(ownerId);
-    }
-
     @PostMapping
     public BookingDto create(@RequestBody BookingDtoInput bookingDtoInput,
                              @RequestHeader(USER_ID) Long bookerId) {
@@ -53,6 +48,10 @@ public class BookingController {
                                            @PathVariable Long bookingId,
                                            @RequestParam Boolean approved) {
         return service.update(bookingId, ownerId, approved);
+    }
+    @GetMapping("/items")
+    public Map<Item, List<BookingDtoShort>> getLastAndNextBooking(@RequestHeader(USER_ID) Long ownerId) {
+        return service.getLastAndNextBooking(ownerId);
     }
 
 }
