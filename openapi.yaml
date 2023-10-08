@@ -1,0 +1,742 @@
+openapi: 3.0.0
+info:
+  title: toShare API
+  version: '1.0'
+tags:
+  - name: request
+servers:
+  - url: http://localhost:8080
+    description: your server
+paths:
+  /users:
+    get:
+      tags:
+        - user
+      summary: Fetch all users
+      description: Fetch all users from the system
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - user
+      summary: Add a new user
+      description: Add a new user to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: User added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Fetch user by ID
+      description: Fetch a single user by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    patch:
+      tags:
+        - user
+      summary: Update user by ID
+      description: Update a user's information by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    delete:
+      tags:
+        - user
+      summary: Delete user by ID
+      description: Delete a user by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deleted successfully
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/e/{email}:
+    get:
+      tags:
+        - user
+      summary: Fetch user by email
+      description: Fetch a single user by email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /bookings:
+    post:
+      tags:
+        - booking
+      summary: Create a new booking
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingDtoInput'
+      responses:
+        '200':
+          description: Booking successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    get:
+      tags:
+        - booking
+      summary: Get all bookings by user
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: state
+          in: query
+          schema:
+            type: string
+            default: "ALL"
+      responses:
+        '200':
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /bookings/{bookingId}:
+    get:
+      tags:
+        - booking
+      summary: Get a booking by its ID
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Booking details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    patch:
+      tags:
+        - booking
+      summary: Update the status of a booking
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: approved
+          in: query
+          required: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Booking successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bookings/owner:
+    get:
+      tags:
+        - booking
+      summary: Get all bookings for the owner
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: state
+          in: query
+          schema:
+            type: string
+            default: "ALL"
+      responses:
+        '200':
+          description: List of bookings for the owner
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bookings/items:
+    get:
+      tags:
+        - booking
+      summary: Get the last and next bookings for the owner
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Map of last and next bookings
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/BookingDtoShort'
+                    
+  /requests:
+    post:
+      tags:
+        - request
+      summary: Add a new request
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatedRequestDto'
+      responses:
+        '200':
+          description: Request successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      tags:
+        - request
+      summary: Get all requests by a user ID
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: An array of requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /requests/{requestId}:
+    get:
+      tags:
+        - request
+      summary: Get a request by its ID
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              
+  /requests/all:
+    get:
+      tags:
+        - request
+      summary: Get all requests with pagination
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: from
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: An array of requests with pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /items:
+    get:
+      tags:
+        - item
+      summary: Retrieve all items for a user
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    post:
+      tags:
+        - item
+      summary: Add a new item
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemDto'
+      responses:
+        '200':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+
+  /items/{itemId}:
+    get:
+      tags:
+        - item
+      summary: Retrieve an item by ID
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    patch:
+      tags:
+        - item
+      summary: Update an item
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemDto'
+      responses:
+        '200':
+          description: Item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    delete:
+      tags:
+        - item
+      summary: Delete an item
+      parameters:
+        - name: X-Sharer-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item deleted
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /items/search:
+    get:
+      tags:
+        - item
+      summary: Search items by text
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    ItemDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        owner:
+          $ref: '#/components/schemas/UserDto'
+        name:
+          type: string
+        description:
+          type: string
+        available:
+          type: boolean
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentDto'
+        requestId:
+          type: integer
+          
+    CommentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        item:
+          $ref: '#/components/schemas/ItemDto'
+        authorName:
+          type: string
+        created:
+          type: string
+          format: date-time
+          
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+  
+    BookingDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        item:
+          type: object
+        booker:
+          type: object
+        status:
+          type: string
+
+    BookingDtoInput:
+      type: object
+      properties:
+        itemId:
+          type: integer
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+
+    BookingDtoShort:
+      type: object
+      properties:
+        id:
+          type: integer
+        bookerId:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+          
+    CreatedRequestDto:
+      type: object
+      properties:
+        description:
+          type: string
+          
+    RequestDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        requester:
+          type: object
+        created:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
