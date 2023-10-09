@@ -113,10 +113,10 @@ public class ItemServiceImpl implements ItemService {
     private Item validateBeforeUpdate(Item item, ItemDto itemDto) {
         if (itemDto.getName() != null && !itemDto.getName().isEmpty()) {
             item.setName(itemDto.getName());
-        }else throw new InvalidInputDataException("Name should not be blank");
+        }
         if (itemDto.getDescription() != null && !itemDto.getDescription().isEmpty()) {
             item.setDescription(itemDto.getDescription());
-        }else throw new InvalidInputDataException("Description should not be blank");
+        }
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }

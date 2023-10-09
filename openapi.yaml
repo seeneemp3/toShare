@@ -335,6 +335,12 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/BookingDtoShort'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
                     
   /requests:
     post:
@@ -508,6 +514,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemDto'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /items/{itemId}:
     get:
