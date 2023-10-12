@@ -1,4 +1,4 @@
-package org.personal.User;
+package org.personal.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

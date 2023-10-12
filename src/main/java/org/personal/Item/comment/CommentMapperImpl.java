@@ -1,7 +1,7 @@
 package org.personal.Item.comment;
 
 import org.personal.Item.Item;
-import org.personal.User.User;
+import org.personal.user.User;
 import org.springframework.stereotype.Component;
 
 @Component

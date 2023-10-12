@@ -1,5 +1,5 @@
-package org.personal.User.dto;
-import org.personal.User.User;
+package org.personal.user.dto;
+import org.personal.user.User;
 
 public interface UserMapper {
 

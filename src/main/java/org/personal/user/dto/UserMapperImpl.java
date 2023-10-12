@@ -1,6 +1,6 @@
-package org.personal.User.dto;
+package org.personal.user.dto;
 
-import org.personal.User.User;
+import org.personal.user.User;
 import org.springframework.stereotype.Component;
 
 @Component

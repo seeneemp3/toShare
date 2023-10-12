@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.personal.Item.comment.Comment;
 import org.personal.Item.comment.CommentDto;
 import org.personal.Item.comment.CommentMapperImpl;
-import org.personal.User.User;
+import org.personal.user.User;
 
 import java.time.LocalDateTime;
 import java.time.Month;

@@ -2,8 +2,8 @@ package org.personal.request;
 
 import lombok.RequiredArgsConstructor;
 import org.personal.Item.ItemRepository;
-import org.personal.User.User;
-import org.personal.User.UserRepository;
+import org.personal.user.User;
+import org.personal.user.UserRepository;
 import org.personal.exeption.RequestNotFoundException;
 import org.personal.exeption.UserNotFoundException;
 import org.personal.request.dto.CreatedRequestDto;

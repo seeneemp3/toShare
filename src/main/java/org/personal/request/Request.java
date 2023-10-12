@@ -3,7 +3,7 @@ package org.personal.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personal.User.User;
+import org.personal.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

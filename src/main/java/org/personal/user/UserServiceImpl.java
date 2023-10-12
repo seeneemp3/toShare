@@ -1,8 +1,8 @@
-package org.personal.User;
+package org.personal.user;
 
 import lombok.RequiredArgsConstructor;
-import org.personal.User.dto.UserDto;
-import org.personal.User.dto.UserMapper;
+import org.personal.user.dto.UserDto;
+import org.personal.user.dto.UserMapper;
 import org.personal.exeption.UserAlreadyExistsException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.stereotype.Service;

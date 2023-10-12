@@ -2,7 +2,7 @@ package org.personal.request.dto;
 
 import lombok.*;
 import org.personal.Item.Item;
-import org.personal.User.User;
+import org.personal.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

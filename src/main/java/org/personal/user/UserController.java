@@ -1,8 +1,8 @@
-package org.personal.User;
+package org.personal.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.personal.User.dto.UserDto;
+import org.personal.user.dto.UserDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

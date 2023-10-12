@@ -1,10 +1,9 @@
-package org.personal.User.dto;
+package org.personal.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.personal.User.UserState;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

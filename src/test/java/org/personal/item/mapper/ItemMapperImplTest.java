@@ -14,7 +14,7 @@ import org.personal.Item.comment.CommentMapper;
 import org.personal.Item.comment.CommentRepository;
 import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapperImpl;
-import org.personal.User.User;
+import org.personal.user.User;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

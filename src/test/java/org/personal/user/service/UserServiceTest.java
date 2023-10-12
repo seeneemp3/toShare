@@ -8,11 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.personal.User.User;
-import org.personal.User.UserRepository;
-import org.personal.User.UserServiceImpl;
-import org.personal.User.dto.UserDto;
-import org.personal.User.dto.UserMapperImpl;
+import org.personal.user.User;
+import org.personal.user.UserRepository;
+import org.personal.user.UserServiceImpl;
+import org.personal.user.dto.UserDto;
+import org.personal.user.dto.UserMapperImpl;
 import org.personal.exeption.UserAlreadyExistsException;
 import org.personal.exeption.UserNotFoundException;
 

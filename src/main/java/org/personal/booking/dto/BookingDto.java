@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.personal.booking.BookingStatus;
 import org.personal.Item.Item;
-import org.personal.User.User;
+import org.personal.user.User;
 
 import java.time.LocalDateTime;
 

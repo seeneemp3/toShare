@@ -1,5 +1,3 @@
---DROP TABLE IF EXISTS users, items, bookings, item_request, comments;
-
 CREATE TABLE IF NOT EXISTS users (
 id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 email varchar(320) NOT NULL,

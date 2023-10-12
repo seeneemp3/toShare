@@ -2,9 +2,9 @@ package org.personal.user.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.personal.User.User;
-import org.personal.User.dto.UserDto;
-import org.personal.User.dto.UserMapperImpl;
+import org.personal.user.User;
+import org.personal.user.dto.UserDto;
+import org.personal.user.dto.UserMapperImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

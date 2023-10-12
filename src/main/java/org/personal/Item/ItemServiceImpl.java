@@ -1,8 +1,8 @@
 package org.personal.Item;
 
 import lombok.RequiredArgsConstructor;
-import org.personal.User.UserService;
-import org.personal.User.dto.UserMapper;
+import org.personal.user.UserService;
+import org.personal.user.dto.UserMapper;
 import org.personal.booking.Booking;
 import org.personal.booking.BookingRepository;
 import org.personal.Item.comment.CommentDto;
@@ -10,17 +10,15 @@ import org.personal.Item.comment.CommentMapper;
 import org.personal.Item.comment.CommentRepository;
 import org.personal.Item.dto.ItemDto;
 import org.personal.Item.dto.ItemMapper;
-import org.personal.User.User;
-import org.personal.User.UserRepository;
+import org.personal.user.User;
+import org.personal.user.UserRepository;
 import org.personal.exeption.BookingDataException;
-import org.personal.exeption.InvalidInputDataException;
 import org.personal.exeption.ItemNotFoundException;
 import org.personal.exeption.UserNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

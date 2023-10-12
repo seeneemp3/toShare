@@ -1,4 +1,4 @@
-package org.personal.User;
+package org.personal.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
