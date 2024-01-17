@@ -23,10 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//TODO check validation on endpoints
-//todo remove unnecessary validation
-//todo json ignore
-//todo postman testing
 
 @Service("ItemServiceImpl")
 @RequiredArgsConstructor
